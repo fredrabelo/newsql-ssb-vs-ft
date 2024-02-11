@@ -49,12 +49,12 @@ queries_text_ft = [
 ]
 
 
-host = "svc-HOST.aws-virginia-6.svc.singlestore.com"  #sf50 
+host = "svc-HOST.aws-virginia-6.svc.singlestore.com"  #sf100 
 user = "admin"
-password = "XXXXXXXXXXX" #sf50 
+password = "XXXXXXXXXXX" #sf100 
 datatype = "flat"
-database = "sf50flat"
-size = "sf50"
+database = "sf100flat"
+size = "sf100"
 n_query = 50
 retry_count = 0
 conn = mysql.connector.connect(host=host, user=user, password=password, database=database)

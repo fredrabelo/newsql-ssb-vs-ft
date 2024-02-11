@@ -48,13 +48,13 @@ queries_text_ss = [
 ]
 
 
-host = "HOST-dml.aws-virginia-4.svc.singlestore.com"  #sf50 
+host = "svc-HOST.aws-virginia-6.svc.singlestore.com"  #sf100 
 user = "admin"
-password = "XXXXXXXXXXXXXXXXXX" #sf50 
-datatype = "starschema_index"
-database = "sf50_starschema"
-size = "sf50"
-n_query = 60
+password = "XXXXXXXXXXX" #sf100 
+datatype = "starschema"
+database = "sf100_starschema"
+size = "sf100"
+n_query = 35
 retry_count = 0
 conn = mysql.connector.connect(host=host, user=user, password=password, database=database)
 if conn.is_connected():
@@ -63,7 +63,7 @@ if conn.is_connected():
         cursor = conn.cursor(buffered=True)
         #cursor.execute('SET GLOBAL connect_timeout=6000000')
         #cursor.execute('SET GLOBAL max_allowed_packet=1073741824')
-        for i in range(0,13):
+        for i in range(4,13):
             exec = []
             start = datetime.today()
             print("start_{}:{}".format(i, start.strftime("%Y-%m-%d %H:%M:%S")))
@@ -110,6 +110,8 @@ if conn.is_connected():
             delta = str(end - start).split(".")[0]
             times = {"START": start.strftime("%Y-%m-%d %H:%M:%S"), "FINISH": end.strftime("%Y-%m-%d %H:%M:%S"), "DELTA": delta}
             pd.DataFrame.from_dict([times]).to_csv("data/{}/{}/times.csv".format(size,datatype), mode="a", index=False, header=not os.path.exists(f"C:/Users/fredrabelo/Desktop/Doutorado/Experimentos/Singlestore/data/{size}/{datatype}/times.csv"))
+            resultado = {"#": i, "MEAN CPU_TIME_MS": ci(results["CPU_TIME_MS"])[0], "STD CPU_TIME_MS": np.std(results["CPU_TIME_MS"][0]), "MEAN ELAPSED_TIME_MS": ci(results["ELAPSED_TIME_MS"])[0], "STD ELAPSED_TIME_MS": np.std(results["ELAPSED_TIME_MS"][0]), "MEAN AVG_MEMORY_USED_B": ci(results["AVG_MEMORY_USED_B"])[0], "STD AVG_MEMORY_USED_B": np.std(results["AVG_MEMORY_USED_B"][0])}
+            pd.DataFrame.from_dict([resultado]).to_csv("data/{}/{}/resultado.csv".format(size,datatype), mode="a", index=False, header=not os.path.exists(f"C:/Users/fredrabelo/Desktop/Doutorado/Experimentos/Singlestore/data/{size}/{datatype}/resultado.csv"))
     except Exception as e:
         print(repr(e))
         print ("Retry after 5 sec")
